@@ -13,7 +13,7 @@ from datetime import datetime
 import os
 
 # %% ../nbs/API/models.ipynb 4
-if not hasattr(os.environ,'PRODUCTION_SOURCE') or os.environ['PRODUCTION_SOURCE'] == 'local':
+if not hasattr(os.environ,'PRODUCTION_SOURCE') or os.environ.get('PRODUCTION_SOURCE') == 'local':
     from dotenv import load_dotenv
     load_dotenv() 
 
@@ -69,9 +69,9 @@ class LLMConfig:
 @dataclass
 class DBConfig:
     schema_: str
-    account: str = os.environ['SNOWFLAKE_ACCOUNT']
-    user: str = os.environ['SNOWFLAKE_USER']
-    password: str = os.environ['SNOWFLAKE_PASSWORD']
-    warehouse: str = os.environ['SNOWFLAKE_WAREHOUSE']
-    database: str = os.environ['SNOWFLAKE_DATABASE']
+    account: str = os.environ.get('SNOWFLAKE_ACCOUNT')
+    user: str = os.environ.get('SNOWFLAKE_USER')
+    password: str = os.environ.get('SNOWFLAKE_PASSWORD')
+    warehouse: str = os.environ.get('SNOWFLAKE_WAREHOUSE')
+    database: str = os.environ.get('SNOWFLAKE_DATABASE')
     role: Optional[str] = None

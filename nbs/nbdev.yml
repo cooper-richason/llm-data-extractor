@@ -1,0 +1,9 @@
+project:
+  output-dir: _docs
+
+website:
+  title: "llm-data-extractor"
+  site-url: "https://cooper-richason.github.io/llm-data-extractor"
+  description: "Extract Data Using LLMs"
+  repo-branch: main
+  repo-url: "https://github.com/cooper-richason/llm-data-extractor"

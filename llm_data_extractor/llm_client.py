@@ -200,7 +200,7 @@ def _call_huggingface_api(prompt: str, config: LLMConfig) -> str:
         
         response.raise_for_status()
         result = response.json()
-        print('\nResponse:', result)
+        #print('\nResponse:', result)
         
         # Extract content from OpenAI-style response
         if "choices" in result and len(result["choices"]) > 0:

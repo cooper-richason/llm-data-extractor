@@ -19,6 +19,7 @@ from .extract import extract_data
 import logging
 import ast
 from .log_utils import setup_logger, call_with_visible_output
+from tqdm import tqdm
 
 # %% ../nbs/API/processor.ipynb 4
 log = setup_logger("processor")  # call once per process
@@ -314,7 +315,7 @@ def process_query(query: str, llm_config: LLMConfig, db_config: DBConfig, result
     all_results = []
     with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
         future_to_batch = {executor.submit(_process_batch, batch, llm_config): batch for batch in batches}
-        for future in concurrent.futures.as_completed(future_to_batch):
+        for future in tqdm(concurrent.futures.as_completed(future_to_batch), total=len(batches), desc="Processing Batches"):
             try:
                 results = future.result()
                 log.debug(f'Result: {results}')

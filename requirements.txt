@@ -5,3 +5,4 @@ pandas
 "snowflake-connector-python[pandas]"
 IPython
 dotenv
+tqdm

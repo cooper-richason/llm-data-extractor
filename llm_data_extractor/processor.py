@@ -315,14 +315,17 @@ def process_query(query: str, llm_config: LLMConfig, db_config: DBConfig, result
     all_results = []
     with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
         future_to_batch = {executor.submit(_process_batch, batch, llm_config): batch for batch in batches}
-        for future in tqdm(concurrent.futures.as_completed(future_to_batch), total=len(batches), desc="Processing Batches"):
-            try:
-                results = future.result()
-                log.debug(f'Result: {results}')
-                all_results.extend(results)
-            except Exception as exc:
-                batch_info = future_to_batch[future]
-                log.debug(f"Batch for input_row_id {batch_info['input_row_id']} generated an exception: {exc}")
+        with tqdm(total=len(batches), desc="Processing Batches") as pbar:
+            for future in concurrent.futures.as_completed(future_to_batch):
+                try:
+                    results = future.result()
+                    log.debug(f'Result: {results}')
+                    all_results.extend(results)
+                except Exception as exc:
+                    batch_info = future_to_batch[future]
+                    log.debug(f"Batch for input_row_id {batch_info['input_row_id']} generated an exception: {exc}")
+                finally:
+                    pbar.update(1)
 
     # 5. Insert results into DB
     if all_results:

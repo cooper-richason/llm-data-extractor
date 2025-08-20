@@ -5,12 +5,12 @@ This package provides tools to define questions, validate responses, and extract
 structured data using Large Language Models.
 """
 
-from .models import Question, ExtractionResult, LLMConfig, AnswerType
-from .extract import extract_data, batch_extract_data
+from .models import Question, ExtractionResult, LLMConfig, AnswerType, DBConfig
+from .extract import extract_data
 from .prompt_builder import build_prompt
 from .llm_client import get_llm_response, parse_llm_json_response, LLMClientError
 from .validator import validate_answer
-from .processor import format_for_db, format_for_target_tables, create_summary_stats
+from .processor import format_for_db, format_for_target_tables, create_summary_stats, process_query
 
 __version__ = "0.0.1"
 __author__ = "Cooper Richason"
@@ -22,10 +22,10 @@ __all__ = [
     "ExtractionResult", 
     "LLMConfig",
     "AnswerType",
+    "DBConfig",
     
     # Main extraction functions
     "extract_data",
-    "batch_extract_data",
     
     # Individual components (for advanced usage)
     "build_prompt",
@@ -35,14 +35,14 @@ __all__ = [
     "format_for_db",
     "format_for_target_tables",
     "create_summary_stats",
+    "process_query",
     
     # Exceptions
     "LLMClientError"
 ]
 
 # Convenience imports for common use cases
-def create_question(id: str, text: str, answer_type: str, 
-                   target_table: str, target_field: str, **kwargs) -> Question:
+def create_question(id: str, text: str, answer_type: str, **kwargs) -> Question:
     """
     Convenience function to create a Question object.
     
@@ -61,9 +61,5 @@ def create_question(id: str, text: str, answer_type: str,
         id=id,
         text=text,
         answer_type=AnswerType(answer_type),
-        target_table=target_table,
-        target_field=target_field,
-        constraints=kwargs.get('constraints', {}),
-        priority=kwargs.get('priority', 1),
-        group_key=kwargs.get('group_key')
+        answer_config=kwargs
     )

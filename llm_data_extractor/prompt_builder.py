@@ -22,9 +22,6 @@ def build_prompt(questions: List[Question], source_text: str) -> str:
         Formatted prompt string
     """
     
-    # Group questions by similarity or type for better processing
-    grouped_questions = _group_questions(questions)
-    
     prompt_parts = [
         "You are a data extraction assistant. Extract the requested information from the provided text.",
         "",
@@ -33,6 +30,7 @@ def build_prompt(questions: List[Question], source_text: str) -> str:
         "- If information is not available, respond with 'NULL'",
         "- Follow the exact format requirements for each question",
         "- Provide a confidence score (0.0-1.0) for each answer",
+        "- Answer must follow format. No other notes or text can be included with the response json.",
         "",
         "TEXT TO ANALYZE:",
         "---",
@@ -65,32 +63,21 @@ def build_prompt(questions: List[Question], source_text: str) -> str:
     return "\n".join(prompt_parts)
 
 
-def _group_questions(questions: List[Question]) -> Dict[str, List[Question]]:
-    """Group questions by group_key or similar characteristics."""
-    groups = {}
-    for question in questions:
-        key = question.group_key or question.answer_type.value
-        if key not in groups:
-            groups[key] = []
-        groups[key].append(question)
-    return groups
-
-
 def _get_format_instruction(question: Question) -> str:
-    """Generate format instruction based on question type and constraints."""
+    """Generate format instruction based on question type and answer_config."""
     answer_type = question.answer_type
-    constraints = question.constraints
+    answer_config = question.answer_config
     
     if answer_type == AnswerType.BOOLEAN:
         return "true or false"
     
     elif answer_type == AnswerType.ENUM:
-        valid_values = constraints.get("valid_values", [])
-        return f"One of: {', '.join(str(v) for v in valid_values)}"
+        valid_values = answer_config.get("values", [])
+        return f"Select one from the list: [{', '.join(str(v) for v in valid_values)}]"
     
     elif answer_type == AnswerType.INTEGER:
-        min_val = constraints.get("min")
-        max_val = constraints.get("max")
+        min_val = answer_config.get("min")
+        max_val = answer_config.get("max")
         if min_val is not None and max_val is not None:
             return f"Integer between {min_val} and {max_val}"
         elif min_val is not None:
@@ -104,15 +91,15 @@ def _get_format_instruction(question: Question) -> str:
         return "Decimal number"
     
     elif answer_type == AnswerType.DATE:
-        date_format = constraints.get("format", "YYYY-MM-DD")
+        date_format = answer_config.get("format", "YYYY-MM-DD")
         return f"Date in format: {date_format}"
     
     elif answer_type == AnswerType.LIST:
-        item_type = constraints.get("item_type", "string")
+        item_type = answer_config.get("item_type", "string")
         return f"List of {item_type} values, comma-separated"
     
     else:  # STRING
-        max_length = constraints.get("max_length")
+        max_length = answer_config.get("max_length")
         if max_length:
             return f"Text (max {max_length} characters)"
         return "Text"

@@ -185,7 +185,7 @@ def _call_huggingface_api(prompt: str, config: LLMConfig) -> str:
         "temperature": config.temperature,
     }
     
-    print('\nPayload:',payload)
+    #print('\nPayload:',payload)
 
     if config.max_tokens:
         payload["max_tokens"] = config.max_tokens

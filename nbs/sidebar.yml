@@ -1,0 +1,14 @@
+website:
+  sidebar:
+    contents:
+      - index.ipynb
+      - section: API
+        contents:
+          - API/extract.ipynb
+          - API/llm_client.ipynb
+          - API/log_utls.ipynb
+          - API/models.ipynb
+          - API/processor.ipynb
+          - API/prompt_builder.ipynb
+          - API/snowflake.ipynb
+          - API/validator.ipynb

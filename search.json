@@ -1,0 +1,110 @@
+[
+  {
+    "objectID": "API/prompt_builder.html",
+    "href": "API/prompt_builder.html",
+    "title": "prompt_builder",
+    "section": "",
+    "text": "source\n\nbuild_prompt\n\n build_prompt (questions:List[llm_data_extractor.models.Question],\n               source_text:str)\n\n*Build a structured prompt for LLM data extraction.\nArgs: questions: List of Question objects to extract data for source_text: The unstructured text to extract data from\nReturns: Formatted prompt string*\n\nexample_text = \"\"\"\nHello\nI’m a concerned husband trying to see if I’m able to talk my wife into treatment to come off of benzos, vyvanse , and other miscellaneous drugs that are frequently mixed daily with alcohol Condition , THC gummies and occasionally kratom. She is not herself and making very serious and impulsive decisions that are badly affecting our family. I need to remain anonymous and make sure all communication is done via [EMAIL] to avoid alerting [PERSON] in case we do an intervention. I have Aetna Insurance PPO and wondering what the cost of 30 days of treatment would be if she were to opt to receive help.\"\"\"",
+    "crumbs": [
+      "API",
+      "prompt_builder"
+    ]
+  },
+  {
+    "objectID": "API/llm_client.html",
+    "href": "API/llm_client.html",
+    "title": "llm_client",
+    "section": "",
+    "text": "source\n\nparse_llm_json_response\n\n parse_llm_json_response (response:str)\n\n*Parse JSON response from LLM, handling common formatting issues.\nArgs: response: Raw response string from LLM\nReturns: Parsed JSON object\nRaises: LLMClientError: If JSON cannot be parsed*\n\nsource\n\n\nget_llm_response\n\n get_llm_response (prompt:str, config:llm_data_extractor.models.LLMConfig)\n\n*Get response from LLM API with retry logic.\nArgs: prompt: The prompt to send to the LLM config: LLM configuration object\nReturns: Raw response string from the LLM\nRaises: LLMClientError: If all retry attempts fail*\n\nsource\n\n\nLLMClientError\nCustom exception for LLM client errors.",
+    "crumbs": [
+      "API",
+      "llm_client"
+    ]
+  },
+  {
+    "objectID": "API/snowflake.html",
+    "href": "API/snowflake.html",
+    "title": "Snowflake",
+    "section": "",
+    "text": "source\n\nget_connection\n\n get_connection (config:llm_data_extractor.models.DBConfig)\n\nEstablishes a connection to Snowflake.\n\nsource\n\n\nfetch_data\n\n fetch_data (query:str,\n             conn:snowflake.connector.connection.SnowflakeConnection)\n\nFetches data from Snowflake using a given query.\n\nsource\n\n\ninsert_results\n\n insert_results (results:List[Dict[str,Any]],\n                 conn:snowflake.connector.connection.SnowflakeConnection,\n                 table_name:str)\n\n*Inserts or merges extraction results into a Snowflake table.\nArgs: results: List of dictionaries, where each dictionary represents a row to insert. conn: Snowflake connection object. table_name: The name of the table to insert results into.*",
+    "crumbs": [
+      "API",
+      "Snowflake"
+    ]
+  },
+  {
+    "objectID": "API/models.html",
+    "href": "API/models.html",
+    "title": "models",
+    "section": "",
+    "text": "source\n\nAnswerType\n\n AnswerType (value, names=None, module=None, qualname=None, type=None,\n             start=1)\n\nAn enumeration.\n\nsource\n\n\nQuestion\n\n Question (id:str, text:str, answer_type:__main__.AnswerType,\n           answer_config:Dict[str,Any]=&lt;factory&gt;)\n\n\nsource\n\n\nExtractionResult\n\n ExtractionResult (question_id:str, raw_answer:str, parsed_answer:Any,\n                   confidence:Optional[float], is_valid:bool,\n                   input_row_id:Optional[str]=None,\n                   table_name:str='PROCESSED_FORMSTACK_DATA',\n                   field_name:str='MESSAGE',\n                   validation_error:Optional[str]=None,\n                   timestamp:datetime.datetime=&lt;factory&gt;)\n\n\nsource\n\n\nLLMConfig\n\n LLMConfig (model_name:str='gpt-3.5-turbo', temperature:float=0.0,\n            max_tokens:Optional[int]=None, api_key:Optional[str]=None,\n            base_url:Optional[str]=None, timeout:int=60,\n            max_retries:int=3)\n\n\nsource\n\n\nDBConfig\n\n DBConfig (schema_:str, account:str=None, user:str=None,\n           password:str=None, warehouse:str=None, database:str=None,\n           role:Optional[str]=None)",
+    "crumbs": [
+      "API",
+      "models"
+    ]
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "llm-data-extractor",
+    "section": "",
+    "text": "This python package is designed to facilitate data extraction from unstructured text data.",
+    "crumbs": [
+      "llm-data-extractor"
+    ]
+  },
+  {
+    "objectID": "index.html#usage",
+    "href": "index.html#usage",
+    "title": "llm-data-extractor",
+    "section": "Usage",
+    "text": "Usage\n\nInstallation\nInstall latest from the GitHub repository:\n$ pip install git+https://github.com/cooper-richason/llm-data-extractor.git\nor from conda\n$ conda install -c cooper-richason llm_data_extractor\nor from pypi\n$ pip install llm_data_extractor",
+    "crumbs": [
+      "llm-data-extractor"
+    ]
+  },
+  {
+    "objectID": "API/validator.html",
+    "href": "API/validator.html",
+    "title": "validator",
+    "section": "",
+    "text": "source\n\nvalidate_answer\n\n validate_answer (raw_answer:str,\n                  question:llm_data_extractor.models.Question)\n\n*Validate and parse an answer according to question specifications.\nArgs: raw_answer: Raw answer string from LLM question: Question object with validation rules\nReturns: Tuple of (parsed_answer, is_valid, error_message)*",
+    "crumbs": [
+      "API",
+      "validator"
+    ]
+  },
+  {
+    "objectID": "API/processor.html",
+    "href": "API/processor.html",
+    "title": "processor",
+    "section": "",
+    "text": "source\n\ncreate_audit_record\n\n create_audit_record (batch_id:str, source_id:str, total_questions:int,\n                      processing_time_seconds:float,\n                      llm_config:Dict[str,Any],\n                      summary_stats:Dict[str,Any])\n\n*Create an audit record for the extraction batch.\nArgs: batch_id: Unique identifier for the batch source_id: Identifier for the source document total_questions: Number of questions processed processing_time_seconds: Time taken for processing llm_config: Configuration used for LLM calls summary_stats: Summary statistics from create_summary_stats\nReturns: Audit record dictionary*\n\nsource\n\n\ncreate_summary_stats\n\n create_summary_stats\n                       (results:List[llm_data_extractor.models.ExtractionR\n                       esult])\n\n*Create summary statistics for a batch of extraction results.\nArgs: results: List of ExtractionResult objects\nReturns: Dictionary with summary statistics*\n\nsource\n\n\nformat_for_target_tables\n\n format_for_target_tables\n                           (results:List[llm_data_extractor.models.Extract\n                           ionResult], questions_map:Dict[str,Any])\n\n*Format results grouped by target table for direct insertion into business tables.\nArgs: results: List of ExtractionResult objects questions_map: Map of question_id to Question objects\nReturns: Dictionary with table names as keys and records as values*\n\nsource\n\n\nformat_for_db\n\n format_for_db (results:List[llm_data_extractor.models.ExtractionResult],\n                source_id:Optional[str]=None, batch_id:Optional[str]=None)\n\n*Format extraction results for database insertion.\nArgs: results: List of ExtractionResult objects source_id: Optional identifier for the source document/text batch_id: Optional identifier for the processing batch\nReturns: List of dictionaries ready for database insertion*\n\nsource\n\n\nprocess_query\n\n process_query (query:str, llm_config:llm_data_extractor.models.LLMConfig,\n                db_config:llm_data_extractor.models.DBConfig,\n                results_table_name:str, max_workers:int=4)\n\n*Fetches data from Snowflake, processes it in parallel using an LLM, and inserts results back.\nArgs: query: SQL query to fetch the data to be processed. llm_config: Configuration for the LLM. db_config: Configuration for the database connection. results_table_name: Name of the table to store the results. max_workers: The maximum number of threads to use for parallel processing.\nReturns: A dictionary containing summary statistics of the processing run.*",
+    "crumbs": [
+      "API",
+      "processor"
+    ]
+  },
+  {
+    "objectID": "API/log_utls.html",
+    "href": "API/log_utls.html",
+    "title": "logging",
+    "section": "",
+    "text": "source\n\nsetup_logger\n\n setup_logger (name:str='app', level:int=20)\n\n*Create a logger that works in Jupyter (threads) and normal Python scripts. - In notebooks: writes to sys.__stdout__ to avoid IPython’s capture issues - In scripts: writes to sys.stdout*\n\nsource\n\n\nin_ipython\n\n in_ipython ()\n\n\nsource\n\n\ncall_with_visible_output\n\n call_with_visible_output (fn, *args, **kwargs)\n\nRun fn(args, **kwargs) while capturing stdout/stderr, then mirror that output to the real stdout/stderr so it appears in Jupyter and in normal scripts.*",
+    "crumbs": [
+      "API",
+      "logging"
+    ]
+  },
+  {
+    "objectID": "API/extract.html",
+    "href": "API/extract.html",
+    "title": "extract",
+    "section": "",
+    "text": "source\n\nextract_data\n\n extract_data (source_text:str,\n               questions:List[llm_data_extractor.models.Question],\n               llm_config:llm_data_extractor.models.LLMConfig,\n               source_id:Optional[str]=None, batch_id:Optional[str]=None)\n\n*Extract structured data from unstructured text using LLM.\nArgs: source_text: The text to extract data from questions: List of questions to answer llm_config: LLM configuration source_id: Optional identifier for the source batch_id: Optional batch identifier\nReturns: Tuple of (extraction_results, metadata)*",
+    "crumbs": [
+      "API",
+      "extract"
+    ]
+  }
+]
